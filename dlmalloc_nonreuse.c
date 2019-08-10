@@ -3380,6 +3380,7 @@ malloc_revoke_internal(void) {
 #endif
   }
 
+#ifdef CAPREVOKE
   struct caprevoke_stats crst;
   uint64_t start_epoch;
   caprevoke(CAPREVOKE_LAST_PASS|CAPREVOKE_IGNORE_START|CAPREVOKE_NO_WAIT_OK,
@@ -3388,7 +3389,7 @@ malloc_revoke_internal(void) {
   while (!caprevoke_epoch_clears(crst.epoch_fini, start_epoch)) {
     caprevoke(CAPREVOKE_LAST_PASS, start_epoch, &crst);
   }
-
+#endif
 
   for (mchunkptr thePtr = freebin->fd; thePtr != freebin; thePtr = freebin->fd) {
     unlink_first_freebuf_chunk(gm, freebin, thePtr);
